@@ -1,0 +1,272 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-body {
+  flex: 1;
+  padding-bottom: 72px;
+}
+
+/* Screens */
+.screen {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.screen-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 10;
+}
+
+.screen-header h2 {
+  flex: 1;
+  font-size: 20px;
+  text-align: center;
+}
+
+/* Loading */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Error & Empty */
+.error-container,
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 60vh;
+  color: var(--text-secondary);
+}
+
+.error-container button {
+  padding: 8px 16px;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 6px;
+  transition: opacity 0.2s;
+}
+
+.error-container button:hover {
+  opacity: 0.9;
+}
+
+.refresh-btn {
+  font-size: 24px;
+  padding: 4px 8px;
+  color: var(--primary);
+  transition: transform 0.3s;
+}
+
+.refresh-btn:hover {
+  transform: rotate(180deg);
+}
+
+/* Article List */
+.article-list {
+  padding: 0 16px 16px;
+}
+
+/* Article Card */
+.article-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  background: var(--surface);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+
+.article-card:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transform: translateY(-1px);
+}
+
+.article-card-thumb {
+  width: 90px;
+  height: 90px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.article-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.article-source {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.article-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 4px 0 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.article-date {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* Bookmark button — outline when unsaved, filled when saved */
+.bookmark-btn {
+  padding: 4px;
+  flex-shrink: 0;
+  transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bookmark-btn:hover {
+  transform: scale(1.2);
+}
+
+.bookmark-icon {
+  display: block;
+}
+
+.bookmark-fill {
+  fill: none;
+  stroke: var(--bookmark-default);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  transition: fill 0.25s, stroke 0.25s;
+}
+
+.bookmark-saved .bookmark-fill {
+  fill: var(--bookmark-saved);
+  stroke: var(--bookmark-saved);
+  animation: bookmark-pop 0.3s ease;
+}
+
+@keyframes bookmark-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* Bottom Nav */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  z-index: 100;
+}
+
+.nav-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 0 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  transition: color 0.2s;
+}
+
+.nav-tab.active {
+  color: var(--primary);
+}
+
+.nav-tab span:first-child {
+  font-size: 20px;
+}
+
+/* Detail */
+.back-btn {
+  font-size: 14px;
+  padding: 6px 12px;
+  color: var(--primary);
+  transition: opacity 0.2s;
+}
+
+.back-btn:hover {
+  opacity: 0.8;
+}
+
+.detail-content {
+  padding: 0 16px 32px;
+}
+
+.detail-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.detail-title {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 8px 0;
+}
+
+.detail-date {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.detail-content hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 16px 0;
+}
+
+.detail-desc {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.detail-content-text {
+  font-size: 15px;
+  line-height: 1.6;
+}
