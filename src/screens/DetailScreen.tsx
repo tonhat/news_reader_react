@@ -1,7 +1,9 @@
+import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import type { Article } from '../models/article'
 import { toggleSave, selectSavedArticles } from '../store/savedSlice'
+import { addToHistory } from '../store/historySlice'
 
 export default function DetailScreen() {
   const location = useLocation()
@@ -12,6 +14,10 @@ export default function DetailScreen() {
   const saved = article
     ? savedArticles.some((a) => a.title === article.title && a.url === article.url)
     : false
+
+  useEffect(() => {
+    if (article) dispatch(addToHistory(article))
+  }, [dispatch, article])
 
   if (!article) {
     return (

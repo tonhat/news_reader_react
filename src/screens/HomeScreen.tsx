@@ -1,64 +1,72 @@
-import { useState, useEffect, useCallback } from 'react'
-import type { Article } from '../models/article'
-import { fetchTopHeadlines } from '../services/newsService'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchByCategory, setCategory, CATEGORIES } from '../store/categoriesSlice'
+import type { Category } from '../store/categoriesSlice'
+import {
+  selectCategoryArticles,
+  selectCategoryLoading,
+  selectCategoryError,
+  selectActiveCategory,
+} from '../store/categoriesSlice'
 import ArticleCard from '../components/ArticleCard'
 
 export default function HomeScreen() {
-  const [articles, setArticles] = useState<Article[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
-
-  const load = useCallback(async () => {
-    setLoading(true)
-    setError(false)
-    try {
-      const data = await fetchTopHeadlines()
-      setArticles(data)
-    } catch {
-      setError(true)
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+  const dispatch = useDispatch()
+  const articles = useSelector(selectCategoryArticles)
+  const loading = useSelector(selectCategoryLoading)
+  const error = useSelector(selectCategoryError)
+  const activeCategory = useSelector(selectActiveCategory)
 
   useEffect(() => {
-    load()
-  }, [load])
-
-  if (loading) {
-    return (
-      <div className="screen">
-        <div className="loading-container">
-          <div className="spinner" />
-        </div>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="screen">
-        <div className="error-container">
-          <p>Failed to load news</p>
-          <button onClick={load}>Retry</button>
-        </div>
-      </div>
-    )
-  }
+    dispatch(fetchByCategory(activeCategory))
+  }, [dispatch, activeCategory])
 
   return (
     <div className="screen">
       <div className="screen-header">
         <h2>Top Headlines</h2>
-        <button className="refresh-btn" onClick={load} aria-label="Refresh">
-          ↻
-        </button>
       </div>
-      <div className="article-list">
-        {articles.map((article, i) => (
-          <ArticleCard key={`${article.title}-${i}`} article={article} />
+
+      <div className="category-bar">
+        {CATEGORIES.map((cat) => (
+          <button
+            key={cat}
+            className={`category-chip ${cat === activeCategory ? 'category-active' : ''}`}
+            onClick={() => dispatch(setCategory(cat))}
+          >
+            {cat}
+          </button>
         ))}
       </div>
+
+      {loading && (
+        <div className="loading-container">
+          <div className="spinner" />
+        </div>
+      )}
+
+      {!loading && error && (
+        <div className="error-container">
+          <p>{error}</p>
+          <button onClick={() => dispatch(fetchByCategory(activeCategory))}>
+            Retry
+          </button>
+        </div>
+      )}
+
+      {!loading && !error && (
+        <div className="article-list">
+          {articles.length === 0 ? (
+            <div className="empty-container">
+              <p>No articles in this category</p>
+            </div>
+          ) : (
+            articles.map((article, i) => (
+              <ArticleCard key={`${article.title}-${i}`} article={article} />
+            ))
+          )}
+        </div>
+      )}
     </div>
   )
 }
